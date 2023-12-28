@@ -1,9 +1,6 @@
 package org.example;
 
-import org.example.controller.DefaultController;
-import org.example.controller.Request;
-import org.example.controller.RequestHandler;
-import org.example.controller.Response;
+import org.example.controller.*;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -12,9 +9,19 @@ public class DefaultControllerTest {
 
     /** Controller를 테스트 하기 위한 테스트 클래스 들 */
     private class SampleRequest implements Request{
+
+        private static final String DEFAULT_NAME = "Test";
+        private String name;
+
+        public SampleRequest(String name){
+            this.name = name;
+        }
+        public SampleRequest(){
+            this(DEFAULT_NAME);
+        }
         @Override
         public String getName() {
-            return "Test";
+            return this.name;
         }
     }
 
@@ -25,6 +32,12 @@ public class DefaultControllerTest {
         }
     }
 
+    public class SampleExceptionHandler implements RequestHandler{
+        @Override
+        public Response process(Request request) throws Exception {
+            throw new Exception("error processing request");
+        }
+    }
     /** 테스트 객체를 위한 클래스 */
     public class SampleResponse implements Response{
         private static final String NAME = "Test";
@@ -91,6 +104,34 @@ public class DefaultControllerTest {
         Response response= controller.processRequest(request);
         assertNotNull("Must not return a null",response);
         assertEquals(new SampleResponse(), response);
+    }
+
+    @Test
+    public void testProcessRequestErrorResponse(){
+        SampleRequest eRequest = new SampleRequest("testError");
+        SampleExceptionHandler eHandler = new SampleExceptionHandler();
+        controller.addHandler(eRequest,eHandler);
+        Response response = controller.processRequest(eRequest);
+        assertNotNull("Not null", response);
+        assertEquals(ErrorResponse.class, response.getClass());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetHandlerNotDefined(){
+        SampleRequest r = new SampleRequest("testNotDefined");
+
+        // RuntimeException 발생
+        controller.getHandler(r);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testAddRequestDuplicateName(){
+        SampleRequest r = new SampleRequest();
+        SampleHandler h = new SampleHandler();
+
+        // RuntimeException 발생
+        controller.addHandler(r,h);
+
     }
 
 }
