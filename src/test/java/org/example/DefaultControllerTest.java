@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.controller.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -132,6 +133,25 @@ public class DefaultControllerTest {
         // RuntimeException 발생
         controller.addHandler(r,h);
 
+    }
+
+    /** 130 밀리초 동안 10만번 가능한지 테스트
+     *  나중에 timeout 기준을 설정하기 위해 ignore 해두기
+     *  타임 아웃 테스트는 아래 코드와 같이 @Test(timeout = 밀리초단위)
+     * */
+    @Test(timeout = 130)
+    @Ignore(value = "Ignore for now until we decide time limit")
+    public void testProcessMultipleRequestsTimeout(){
+        Request request1;
+        Response response1 = new SampleResponse();
+        RequestHandler handler1 = new SampleHandler();
+        for(int i =0;i<=99999;i++){
+            request1 = new SampleRequest(String.valueOf(i));
+            controller.addHandler(request1,handler1);
+            response1 = controller.processRequest(request1);
+            assertNotNull(response1);
+            assertNotSame(ErrorResponse.class, response1.getClass());
+        }
     }
 
 }
