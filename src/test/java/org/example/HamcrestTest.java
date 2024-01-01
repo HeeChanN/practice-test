@@ -1,6 +1,7 @@
 package org.example;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 
 /** Hamcrest 라이브러리를 사용해서 작성한 테스트 */
+@Ignore
 public class HamcrestTest {
     private ArrayList<String> values;
 

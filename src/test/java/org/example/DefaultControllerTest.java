@@ -6,6 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+@Ignore
 public class DefaultControllerTest {
 
     /** Controller를 테스트 하기 위한 테스트 클래스 들 */

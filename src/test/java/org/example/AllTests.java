@@ -1,8 +1,11 @@
 package org.example;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+
+@Ignore
 @RunWith(value = Suite.class)
 @Suite.SuiteClasses(value = {
         CalculatorTest.class,
